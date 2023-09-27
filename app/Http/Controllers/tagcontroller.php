@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Tag;
 use Illuminate\Http\Request;
 
 class tagcontroller extends Controller
@@ -19,7 +19,7 @@ class tagcontroller extends Controller
      */
     public function create()
     {
-        //
+        return view('create_tag');
     }
 
     /**
@@ -27,7 +27,11 @@ class tagcontroller extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+       $tag_name=$request->tag;
+       Tag::create([
+        'name'=>$tag_name
+       ]);
     }
 
     /**
@@ -35,7 +39,7 @@ class tagcontroller extends Controller
      */
     public function show(string $id)
     {
-        //
+        echo "show page $id";
     }
 
     /**
@@ -43,7 +47,8 @@ class tagcontroller extends Controller
      */
     public function edit(string $id)
     {
-        //
+        echo "edit page $id";
+        return view('edittag');
     }
 
     /**
@@ -51,7 +56,7 @@ class tagcontroller extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        
     }
 
     /**
