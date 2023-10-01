@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet">
+
     <style>
         .ck-editor__editable {
     min-height: 200px; /* Example height */
@@ -45,17 +47,24 @@
             margin: 3px auto;
         }
         /* Style for the custom select */
-#select {
-  width: 200px;
+#tags {
+    display: block;
+  width: 400px;
+  height: 60px;
   padding: 10px;
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #f9f9f9;
   margin-top: 10px;
+  margin-bottom: 17px;
   color: #333;
 }
-.image input {
+#select {
+    display: block;
+
+}
+.tags input {
     width: 200px;
   padding: 10px;
   font-size: 16px;
@@ -86,19 +95,27 @@
         <textarea class="ckeditor" id="editor" name="body"></textarea>
     {{-- select & image  --}}
     <div class="select-img">
-        <select name="select-post" id="select">
-        <option value="">No Selected</option>
-        @foreach (\App\Models\Tag::all() as $tag)
-        <option value="{{$tag}}"></option>
-        @endforeach
-        
+
+        TAGS: 
+    {{-- <select id="tags" names="tags[]"  multiple='multiple' > --}}
+        <select id="tags" name="tags[]"  multiple='multiple' class="tags"   >
+
+    @foreach ($tags as $item)
+        <option value="{{ $item->id }}">{{ $item->name }}</option>
+    @endforeach
+
     </select>
-    <input class="image" type="file" name="image">
+
+    <input class="image" type="file" name="image" id="imageInput">
     </div> {{-- end div of select & image --}}
+    <div>
+        <img src="" alt="" id="preview"  width="120" height="120">
+    </div>
     {{-- button submit --}}
     <button class="button1" type="submit" name="save" >SAVE</button>
     </form>
 
+    {{-- ====================================JS======================================== --}}
     {{-- ckeditor plugin --}}
     <script src="public\ckeditor\ckeditor.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/39.0.2/classic/ckeditor.js"></script>
@@ -118,5 +135,42 @@
      @endforeach
      
     @endif
+
+ 
+    <script>
+        // JavaScript to handle image preview
+        document.getElementById('imageInput').addEventListener('change', function(event) {
+            const preview = document.getElementById('preview');
+            const file = event.target.files[0];
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = '';
+            }
+        });
+    </script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#tags').select2({
+            tags: true, // Allow user to add new tags
+            tokenSeparators: [','], // Define separator for tags
+            width: '60%' // Adjust the width as needed
+        });
+    });
+</script>
+
+
+
+
+
+
 </body>
 </html>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Blog;
+use App\Models\Tag;
 
 use Illuminate\Http\Request;
 
@@ -12,8 +13,8 @@ class blogcontroller extends Controller
      */
     public function index()
     {
-        echo "index page";
-        return view('index');
+        $Data=Blog::all();
+        return view('blogs/index',compact('Data'));
     }
 
     /**
@@ -22,7 +23,9 @@ class blogcontroller extends Controller
     public function create()
     {
         echo "create page";
-        return view('create_blog');
+        $tags=Tag::all();
+
+        return view('blogs/create_blog',compact('tags'));
     }
 
     /**
@@ -30,15 +33,17 @@ class blogcontroller extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validationdata=$request->validate([
             'title'=>'required',
             'image'=>'required|mimes:jpeg,jpg,png|max:2000',
-            // 'select-post'=>'required',
+            'tags' => 'required|array',
+            'tags.*' => 'exists:tags,id',
             'body'=>'required'
 
         ]);
         $title=$request->title;
         $body_content=$request->body;
+        $tags=$request->tags;
 
         
         if($request->hasFile('image')){
@@ -48,12 +53,15 @@ class blogcontroller extends Controller
             $image='/storage/'.$path;
 
         }
-        Blog::create([
+        $blogs=Blog::create([
             "title"=>$title,
             "image"=>$image,
             "body"=>$body_content,
+            
 
         ]);
+        $blogs->tags()->attach($request->tags);
+        return redirect()->back()->with('sucess','the post created sucessfully');
     }
 
     /**
@@ -61,7 +69,9 @@ class blogcontroller extends Controller
      */
     public function show(string $id)
     {
-        echo "show page $id";
+        $blogs=Blog::where("id",$id)->first();
+        
+        return view('blogs/show',compact('blogs'));
     }
 
     /**
@@ -69,7 +79,9 @@ class blogcontroller extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $blogs=Blog::where("id",$id)->first();
+        $tags=Tag::pluck("name","id");
+        return view('blogs/edit_blog',compact('blogs','tags'));
     }
 
     /**
@@ -77,7 +89,10 @@ class blogcontroller extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $title=$request->title;
+        $body_content=$request->body;
+        Blog::where("id",$id)->update(["title"=>$title]);
+
     }
 
     /**
