@@ -70,8 +70,8 @@ class blogcontroller extends Controller
     public function show(string $id)
     {
         $blogs=Blog::where("id",$id)->first();
-        
-        return view('blogs/show',compact('blogs'));
+        $tags=$blogs->tags;
+        return view('blogs/show',compact('blogs','tags'));
     }
 
     /**
@@ -100,6 +100,6 @@ class blogcontroller extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        
     }
 }

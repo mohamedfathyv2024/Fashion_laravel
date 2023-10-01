@@ -13,6 +13,13 @@
         <li>{{$blogs->body}}</li>
         <li> <img src="{{asset($blogs->image)}}" width="60" height="60">
         </li>
+        <ul>
+            @foreach($tags as $tag)
+                <li>{{ $tag->name }}</li>
+            @endforeach
+        </ul>
+
+
     </ul>
         
 
