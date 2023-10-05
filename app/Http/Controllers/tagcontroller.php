@@ -19,7 +19,7 @@ class tagcontroller extends Controller
      */
     public function create()
     {
-        return view('create_tag');
+        return view('tags/create_tag');
     }
 
     /**
@@ -37,7 +37,7 @@ class tagcontroller extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(int $id)
     {
         echo "show page $id";
     }
@@ -45,10 +45,10 @@ class tagcontroller extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(int $id)
     {
-        echo "edit page $id";
-        return view('edittag');
+        $tags=Tag::where('id',$id)->first();
+        return view('tags/edit_tag',compact('tags'));
     }
 
     /**
@@ -56,7 +56,9 @@ class tagcontroller extends Controller
      */
     public function update(Request $request, string $id)
     {
-        
+        $new_tag=$request->tag;
+        Tag::where('id',$id)->update(["name"=>$new_tag]);
+        echo "updated data in $id";
     }
 
     /**

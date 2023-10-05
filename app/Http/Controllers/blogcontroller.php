@@ -46,13 +46,13 @@ class blogcontroller extends Controller
         $tags=$request->tags;
 
         
-        if($request->hasFile('image')){
+       
             // $image=$request->image;
             $filename=time().$request->file('image')->getClientOriginalName();
             $path= $request->file('image')->storeAs('images',$filename,'public');
             $image='/storage/'.$path;
 
-        }
+        
         $blogs=Blog::create([
             "title"=>$title,
             "image"=>$image,
