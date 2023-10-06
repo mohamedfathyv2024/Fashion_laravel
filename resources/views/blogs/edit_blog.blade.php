@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet">
     <style>
         .ck-editor__editable {
     min-height: 200px; /* Example height */
@@ -94,7 +95,7 @@
         TAGS: 
     <select id="tags" names="tags[]"  multiple='multiple' >
         @foreach ($tags as $tagId => $tagName)
-            <option value="{{ $tagId }}">{{ $tagName }}</option>
+            <option value="{{ $tagId }}" @if(in_array($tagId, $tagsIds)) selected @endif>{{ $tagName }}</option>
         @endforeach
     </select>
 
@@ -123,5 +124,18 @@
      @endforeach
      
     @endif
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#tags').select2({
+            placeholder: "Choose tags",
+            tags: true, // Allow user to add new tags
+            tokenSeparators: [','], // Define separator for tags
+            width: '60%' // Adjust the width as needed
+        });
+    });
+</script>
 </body>
 </html>

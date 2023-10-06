@@ -7,10 +7,8 @@
     <title>Document</title>
 </head>
 <body>
-    <table>
-        <tr>
-            <td>{{print_r($Data)}}</td>
-        </tr>
-    </table>
+    @foreach ($data as $blog)
+        <p>{{ $blog->id }}) {{ $blog->title }} <a href="{{ url("blogs/$blog->id") }}">Show</a></p>
+    @endforeach
 </body>
 </html>

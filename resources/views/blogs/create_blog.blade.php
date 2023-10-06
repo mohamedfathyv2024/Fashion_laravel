@@ -84,36 +84,37 @@
     </style>
 </head>
 <body>
+    <div style="width: 50%">
+        <form action="/blogs" method="POST" enctype="multipart/form-data">
+            @csrf
+        {{-- title --}}
+        <div class="make-center"><span>Write Blog Title :</span><input type="text" name="title"
+                placeholder="BLOG TITLE" class="title_class">
+        </div>
+        {{-- text area --}}
+            <textarea class="ckeditor" id="editor" name="body"></textarea>
+        {{-- select & image  --}}
+        <div class="select-img">
     
-    <form action="/blogs" method="POST" enctype="multipart/form-data">
-        @csrf
-    {{-- title --}}
-    <div class="make-center"><span>Write Blog Title :</span><input type="text" name="title"
-            placeholder="BLOG TITLE" class="title_class">
+            TAGS: 
+        {{-- <select id="tags" names="tags[]"  multiple='multiple' > --}}
+            <select id="tags" name="tags[]"  multiple='multiple' class="tags"   >
+    
+        @foreach ($tags as $item)
+            <option value="{{ $item->id }}">{{ $item->name }}</option>
+        @endforeach
+    
+        </select>
+    
+        <input class="image" type="file" name="image" id="imageInput">
+        </div> {{-- end div of select & image --}}
+        <div>
+            <img src="" alt="" id="preview"  width="120" height="120">
+        </div>
+        {{-- button submit --}}
+        <button class="button1" type="submit" name="save" >SAVE</button>
+        </form>
     </div>
-    {{-- text area --}}
-        <textarea class="ckeditor" id="editor" name="body"></textarea>
-    {{-- select & image  --}}
-    <div class="select-img">
-
-        TAGS: 
-    {{-- <select id="tags" names="tags[]"  multiple='multiple' > --}}
-        <select id="tags" name="tags[]"  multiple='multiple' class="tags"   >
-
-    @foreach ($tags as $item)
-        <option value="{{ $item->id }}">{{ $item->name }}</option>
-    @endforeach
-
-    </select>
-
-    <input class="image" type="file" name="image" id="imageInput">
-    </div> {{-- end div of select & image --}}
-    <div>
-        <img src="" alt="" id="preview"  width="120" height="120">
-    </div>
-    {{-- button submit --}}
-    <button class="button1" type="submit" name="save" >SAVE</button>
-    </form>
 
     {{-- ====================================JS======================================== --}}
     {{-- ckeditor plugin --}}
@@ -160,6 +161,7 @@
 <script>
     $(document).ready(function() {
         $('#tags').select2({
+            placeholder: "Choose tags",
             tags: true, // Allow user to add new tags
             tokenSeparators: [','], // Define separator for tags
             width: '60%' // Adjust the width as needed

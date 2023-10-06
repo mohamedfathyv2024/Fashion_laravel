@@ -14,7 +14,7 @@
         <li> <img src="{{asset($blogs->image)}}" width="60" height="60">
         </li>
         <ul>
-            @foreach($tags as $tag)
+            @foreach($blogs->tags as $tag)
                 <li>{{ $tag->name }}</li>
             @endforeach
         </ul>

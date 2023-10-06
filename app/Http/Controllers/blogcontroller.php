@@ -13,8 +13,8 @@ class blogcontroller extends Controller
      */
     public function index()
     {
-        $Data=Blog::all();
-        return view('blogs/index',compact('Data'));
+        $data=Blog::with("tags")->get();
+        return view('blogs/index',compact('data'));
     }
 
     /**
@@ -69,9 +69,8 @@ class blogcontroller extends Controller
      */
     public function show(string $id)
     {
-        $blogs=Blog::where("id",$id)->first();
-        $tags=$blogs->tags;
-        return view('blogs/show',compact('blogs','tags'));
+        $blogs=Blog::with("tags")->where("id",$id)->first();
+        return view('blogs/show',compact('blogs'));
     }
 
     /**
@@ -79,9 +78,11 @@ class blogcontroller extends Controller
      */
     public function edit(string $id)
     {
-        $blogs=Blog::where("id",$id)->first();
-        $tags=Tag::pluck("name","id");
-        return view('blogs/edit_blog',compact('blogs','tags'));
+        $blogs=Blog::with("tags:id")->where("id",$id)->first();
+        $tags=Tag::pluck("name","id")->toArray();
+        $blogTags = $blogs->tags->toArray();
+        $tagsIds = array_column($blogTags, "id");
+        return view('blogs/edit_blog',compact('blogs','tags', "tagsIds"));
     }
 
     /**
